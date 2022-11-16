@@ -10,7 +10,7 @@ services:
         target: /config
       - type: bind
         source: /Volumes/Kratos/Comics
-        target: /comics
+        target: /home/comics
       - type: bind
         source: /etc/timezone
         target: /etc/timezone

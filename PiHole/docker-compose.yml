@@ -4,20 +4,30 @@ version: "3"
 services:
   pihole:
     container_name: pihole
-    image: pihole/pihole:latest
-    # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
+    image: cbcrowe/pihole-unbound:latest
+    hostname: ${HOSTNAME}
+    domainname: ${DOMAIN_NAME}
     ports:
-      - "53:53/tcp"
-      - "53:53/udp"
-      - "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
-      - "80:80/tcp"
+      - 443:443/tcp
+      - 53:53/tcp
+      - 53:53/udp
+      - ${PIHOLE_WEBPORT:-80}:80/tcp
     environment:
-      PIHOLE_BASE: /Volumes/Kratos/Docker/PiHole/pihole-storage
-      # WEBPASSWORD: 'set a secure password here or it will be random'
+      - PIHOLE_BASE: /Volumes/Kratos/Docker/PiHole/pihole-storage
+      - FTLCONF_LOCAL_IPV4=${FTLCONF_LOCAL_IPV4}
+      - WEBPASSWORD=${WEBPASSWORD}
+      - WEBTHEME=${WEBTHEME:-default-light}
+      - REV_SERVER=${REV_SERVER:-false}
+      - REV_SERVER_TARGET=${REV_SERVER_TARGET}
+      - REV_SERVER_DOMAIN=${REV_SERVER_DOMAIN}
+      - REV_SERVER_CIDR=${REV_SERVER_CIDR}
+      - PIHOLE_DNS_=127.0.0.1#5335
+      - DNSSEC="true"
+      - DNSMASQ_LISTENING=single
     # Volumes store your data between container upgrades
     volumes:
     - type: bind
-      source: /Volumes/Kratos/Docker/PiHole/etc-pihole
+      source: /Volumes/Kratos/Docker/PiHole/etc-pihole-unbounded
       target: /etc/pihole
     - type: bind
       source: /Volumes/Kratos/Docker/PiHole/etc-dnsmasq.d

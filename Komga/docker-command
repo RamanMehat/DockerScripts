@@ -3,6 +3,6 @@ docker create \
   --user 1000:1000 \
   -p 8080:8080 \
   --mount type=bind,source=/Volumes/Kratos/Docker/Komga/config,target=/config \
-  --mount type=bind,source=/Volumes/Kratos/Comics,target=/comics \
+  --mount type=bind,source=/Volumes/Kratos/Comics,target=/home/comics \
   --restart unless-stopped \
   gotson/komga
